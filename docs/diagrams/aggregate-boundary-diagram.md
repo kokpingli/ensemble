@@ -1,3 +1,5 @@
+# Aggregate Boundary Diagram
+```mermaid
 graph TB
     subgraph "Session Aggregate"
         SESSION[Session Entity]
