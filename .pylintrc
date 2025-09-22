@@ -1,0 +1,8 @@
+[MESSAGES CONTROL]
+disable=missing-function-docstring,
+        missing-class-docstring,
+        too-few-public-methods,
+        redefined-outer-name
+
+[BASIC]
+good-names=sr,f0,id,e
