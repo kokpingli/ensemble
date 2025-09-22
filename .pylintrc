@@ -1,8 +1,11 @@
 [MESSAGES CONTROL]
-disable=missing-function-docstring,
-        missing-class-docstring,
-        too-few-public-methods,
-        redefined-outer-name
+disable=too-few-public-methods
+
+[REPORTS]
+score=yes
+
+[FORMAT]
+max-line-length=88
 
 [BASIC]
 good-names=sr,f0,id,e

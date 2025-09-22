@@ -14,14 +14,14 @@ def session():
 
 def test_cannot_stop_session_before_starting(session):
     result = session.stop()
-    assert result == False
+    assert result is False
     assert session.state == SessionState.NOT_STARTED
 
 
 def test_can_start_session(session):
     result = session.start()
 
-    assert result == True
+    assert result is True
     assert session.state == SessionState.ACTIVE
 
 
@@ -29,7 +29,7 @@ def test_cannot_start_already_started_session(session):
     session.start()
 
     result = session.start()
-    assert result == False
+    assert result is False
     assert session.state == SessionState.ACTIVE
 
 
@@ -38,7 +38,7 @@ def test_cannot_restart_stopped_session(session):
     session.stop()
 
     result = session.start()
-    assert result == False
+    assert result is False
     assert session.state == SessionState.STOPPED
 
 
@@ -46,13 +46,13 @@ def test_can_stop_active_session(session):
     session.start()
 
     result = session.stop()
-    assert result == True
+    assert result is True
     assert session.state == SessionState.STOPPED
 
 
 def test_can_add_piece_to_inactive_session(session):
     result = session.add_piece("Fur Elise")
-    assert result == True
+    assert result is True
     assert "Fur Elise" in session.get_pieces()
 
 
@@ -60,7 +60,7 @@ def test_can_add_piece_to_active_session(session):
     session.start()
 
     result = session.add_piece("Fur Elise")
-    assert result == True
+    assert result is True
     assert "Fur Elise" in session.get_pieces()
 
 
@@ -69,7 +69,7 @@ def test_cannot_add_piece_to_stopped_session(session):
     session.stop()
 
     result = session.add_piece("Fur Elise")
-    assert result == False
+    assert result is False
     assert "Fur Elise" not in session.get_pieces()
 
 
@@ -78,7 +78,7 @@ def test_adding_existing_piece_succeeds(session):
     session.add_piece("Fur Elise")
 
     result = session.add_piece("Fur Elise")
-    assert result == True
+    assert result is True
     assert len(session.get_pieces()) == 1
 
 
