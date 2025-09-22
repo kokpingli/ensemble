@@ -1,5 +1,6 @@
 from datetime import datetime
 from unittest.mock import Mock, patch
+
 from src.application.use_cases.start_session import StartSessionUseCase
 
 
@@ -19,6 +20,7 @@ def test_creates_and_saves_session_with_pieces(mock_datetime):
     assert saved_session.cellist_id == "cellist_123"
     assert session_id == "cellist_123_20241221_143052"
     assert len(saved_session.pieces) == 2
+
 
 @patch("src.application.use_cases.start_session.datetime")
 def test_can_start_session_without_pieces(mock_datetime):

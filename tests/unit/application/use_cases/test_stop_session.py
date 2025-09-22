@@ -17,6 +17,7 @@ def test_cannot_stop_session_that_does_not_exist():
     mock_repository.get_by_id.assert_called_once_with("nonexistent_session")
     mock_repository.save.assert_not_called()
 
+
 def test_can_stop_active_session():
     session = PracticeSession("session_001", "cellist_001")
     session.start()
@@ -30,6 +31,7 @@ def test_can_stop_active_session():
     assert result is True
     mock_repository.save.assert_called_once_with(session)
 
+
 def test_cannot_stop_another_cellist_session():
     session = PracticeSession("session_002", "cellist_002")
     session.start()
@@ -42,6 +44,7 @@ def test_cannot_stop_another_cellist_session():
 
     assert result is False
     mock_repository.save.assert_not_called()
+
 
 def test_cannot_stop_already_stopped_session():
     session = PracticeSession("session_003", "cellist_003")

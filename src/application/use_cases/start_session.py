@@ -1,3 +1,5 @@
+"""Use case for starting a practice session."""
+
 from datetime import datetime
 
 from src.domain.entities.practice_session import PracticeSession
