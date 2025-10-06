@@ -1,3 +1,6 @@
+"""Value object representing a piece of story content."""
+
+
 class StoryFragment:
     def __init__(self, content: str):
         self.content = content

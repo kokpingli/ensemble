@@ -1,3 +1,6 @@
+"""Value object representing a practice technical goal."""
+
+
 class TechnicalGoal:
     def __init__(self, name: str, completed: bool):
         self.name = name

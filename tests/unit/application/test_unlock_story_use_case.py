@@ -16,9 +16,7 @@ class TestUnlockStoryUseCase:
         mock_section_repository.get_by_id.return_value = mock_section
         use_case = UnlockStoryUseCase(mock_section_repository)
 
-        use_case.execute(
-            user_id="user123", section_id="section456", goal_updates=goal_updates
-        )
+        use_case.execute(section_id="section456", goal_updates=goal_updates)
 
         mock_section_repository.get_by_id.assert_called_once_with("section456")
         mock_section.update_goal_completion.assert_called_once_with(goal_updates)

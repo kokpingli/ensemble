@@ -1,3 +1,6 @@
+"""Value object representing unlock conditions for story sections."""
+
+
 class UnlockConditions:
     def __init__(self, required_goals_count: int):
         self.required_goals_count = required_goals_count

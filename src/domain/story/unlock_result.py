@@ -1,3 +1,5 @@
+"""Value object representing the result of an unlock attempt."""
+
 from .story_fragment import StoryFragment
 
 

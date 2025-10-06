@@ -1,3 +1,5 @@
+"""Story section entity with unlock logic."""
+
 from typing import List
 
 from .story_fragment import StoryFragment
@@ -25,8 +27,7 @@ class Section:
     def unlock_story(self) -> UnlockResult:
         if self._is_unlocked():
             return UnlockResult.successful(self.story_fragment)
-        else:
-            return UnlockResult.unsuccessful()
+        return UnlockResult.unsuccessful()
 
     def _is_unlocked(self) -> bool:
         goals_met = sum(1 for goal in self.technical_goals if goal.is_completed())
