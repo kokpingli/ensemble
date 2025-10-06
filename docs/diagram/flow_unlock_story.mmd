@@ -1,0 +1,49 @@
+sequenceDiagram
+    actor Cellist
+    participant MobileClient as Mobile Client<br/>(Flutter)
+    participant APIGateway as API Gateway<br/>(FastAPI)
+    participant PracticeContext as Practice Context<br/>(Domain Service)
+    participant StoryPort as Story Service Port<br/>(Interface)
+    participant StoryContext as Story Context<br/>(Domain Service)
+    participant Database as Database
+
+    Note over Cellist,Database: Flow: Unlock Story
+    
+    Cellist->>MobileClient: Ticks checkboxes (local state)
+    Cellist->>MobileClient: Clicks "Unlock Story"
+    
+    MobileClient->>APIGateway: POST /api/chapters/{chapter_id}/sections/{section_id}/unlock<br/>{self_assessment: {goal_1: true, ...}}
+    
+    Note over APIGateway: API layer is thin - just delegates to Practice context
+    APIGateway->>PracticeContext: attempt_unlock(user_id, section_id, self_assessment)
+    
+    Note over PracticeContext: Practice context owns the workflow
+    PracticeContext->>Database: INSERT practice_session
+    Database-->>PracticeContext: Success
+    
+    Note over PracticeContext,StoryPort: Practice calls Story via Port (dependency injection)
+    PracticeContext->>StoryPort: check_unlock_eligibility(user_id, section_id)
+    StoryPort->>StoryContext: Implementation of port interface
+    
+    StoryContext->>Database: SELECT unlock_conditions, user_progress
+    Database-->>StoryContext: Conditions & progress data
+    
+    StoryContext->>StoryContext: Evaluate: goals_met >= required_count?
+    
+    alt Unlock eligible
+        StoryContext->>Database: SELECT story_fragment
+        Database-->>StoryContext: Story fragment content
+        StoryContext->>Database: UPDATE user_unlocks
+        Database-->>StoryContext: Success
+        StoryContext-->>StoryPort: UnlockResult(eligible=True, fragment={...})
+        StoryPort-->>PracticeContext: UnlockResult returned
+        PracticeContext-->>APIGateway: UnlockResult
+        APIGateway-->>MobileClient: 200 OK {eligible: true, story_fragment: {...}}
+        MobileClient->>Cellist: Display story fragment
+    else Not eligible
+        StoryContext-->>StoryPort: UnlockResult(eligible=False, reason="...")
+        StoryPort-->>PracticeContext: UnlockResult returned
+        PracticeContext-->>APIGateway: UnlockResult
+        APIGateway-->>MobileClient: 200 OK {eligible: false, message: "..."}
+        MobileClient->>Cellist: Display "Not ready yet" message
+    end

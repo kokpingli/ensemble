@@ -1,0 +1,30 @@
+sequenceDiagram
+    actor Cellist
+    participant MobileClient as Mobile Client<br/>(Flutter)
+    participant APIGateway as API Gateway<br/>(FastAPI)
+    participant StoryContext as Story Context<br/>(Domain Service)
+    participant PracticeContext as Practice Context<br/>(Domain Service)
+    participant Database as Database
+
+    Note over Cellist,Database: Flow: Load Section
+    
+    Cellist->>MobileClient: Opens app, navigates to section
+    
+    MobileClient->>APIGateway: GET /api/chapters/{chapter_id}/sections/{section_id}
+    
+    APIGateway->>StoryContext: get_section(section_id)
+    StoryContext->>Database: SELECT section, technical_goals, reference_recording
+    Database-->>StoryContext: Section data
+    StoryContext-->>APIGateway: Section data
+    
+    APIGateway->>PracticeContext: get_user_progress(user_id, section_id)
+    PracticeContext->>Database: SELECT user_progress, unlocked_stories
+    Database-->>PracticeContext: Progress data
+    PracticeContext-->>APIGateway: User progress
+    
+    APIGateway->>APIGateway: Combine section + progress
+    APIGateway-->>MobileClient: 200 OK {section: {...}, user_progress: {...}}
+    
+    MobileClient->>Cellist: Display: reference recording player, checklist, story status
+    
+    Note over Cellist: Cellist listens to reference (local)<br/>Cellist practices (offline)<br/>No backend calls
