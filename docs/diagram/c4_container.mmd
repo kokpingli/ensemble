@@ -1,0 +1,23 @@
+C4Container
+    title Container Diagram - Ensemble App
+
+    Person(cellist, "Cellist", "Cello student")
+
+    Container_Boundary(ensemble, "Ensemble App") {
+        Container(mobile, "Mobile Client", "Flutter", "Provides practice interface, goal tracking, and story display")
+
+        Container(api, "API Gateway", "FastAPI", "Handles HTTP requests, authentication, and routes to appropriate contexts")
+
+        Container(practice, "Practice Context", "Python/Domain Service", "Manages practice sessions and unlock workflow")
+
+        Container(story, "Story Context", "Python/Domain Service", "Manages story content, sections, and unlock conditions")
+
+        ContainerDb(db, "Database", "PostgreSQL", "Stores practice data, story content, and user progress")
+    }
+
+    Rel(cellist, mobile, "Practices goals, views stories")
+    Rel(mobile, api, "API calls", "HTTPS/JSON")
+    Rel(api, practice, "Unlock requests")
+    Rel(practice, story, "Check eligibility", "Domain Service Port")
+    Rel(practice, db, "Store sessions")
+    Rel(story, db, "Read/write story data")

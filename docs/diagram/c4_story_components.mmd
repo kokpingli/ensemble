@@ -1,0 +1,34 @@
+C4Component
+    title Component Diagram - Story Context
+
+    Container(api, "API Gateway", "FastAPI", "Routes unlock requests")
+    Container(practice, "Practice Context", "Python", "Manages unlock workflow")
+    ContainerDb(db, "Database", "PostgreSQL", "Story and progress data")
+
+    Container_Boundary(story, "Story Context") {
+        Component(usecase, "UnlockStoryUseCase", "Application Service", "Orchestrates unlock workflow")
+
+        Component(section, "Section", "Domain Entity", "Manages technical goals and determines unlock eligibility")
+
+        Component(unlock_conditions, "UnlockConditions", "Value Object", "Business rules for unlock requirements")
+
+        Component(story_fragment, "StoryFragment", "Value Object", "Story content to be unlocked")
+
+        Component(unlock_result, "UnlockResult", "Value Object", "Result of unlock attempt")
+
+        Component(repo_interface, "SectionRepository", "Interface", "Repository contract for section persistence")
+
+        Component(repo_impl, "SectionRepositoryImpl", "Infrastructure", "Database implementation of repository")
+    }
+
+    Rel(practice, usecase, "execute(section_id, goal_updates)")
+    Rel(usecase, repo_interface, "get_by_id(section_id)")
+    Rel(repo_interface, repo_impl, "implements")
+    Rel(repo_impl, db, "SQL queries")
+
+    Rel(usecase, section, "update_goal_completion()")
+    Rel(section, unlock_conditions, "is_satisfied(goals_met)")
+    Rel(section, unlock_result, "successful() / unsuccessful()")
+    Rel(section, story_fragment, "contains")
+
+    Rel(usecase, practice, "returns UnlockResult")
