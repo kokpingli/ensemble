@@ -20,4 +20,5 @@ class TestUnlockStoryUseCase:
 
         mock_section_repository.get_by_id.assert_called_once_with("section456")
         mock_section.update_goal_completion.assert_called_once_with(goal_updates)
+        mock_section_repository.save.assert_called_once_with(mock_section)
         mock_section.unlock_story.assert_called_once()

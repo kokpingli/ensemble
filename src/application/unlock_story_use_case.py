@@ -8,4 +8,5 @@ class UnlockStoryUseCase:
     def execute(self, section_id: str, goal_updates: dict):
         section = self.section_repository.get_by_id(section_id)
         section.update_goal_completion(goal_updates)
+        self.section_repository.save(section)
         return section.unlock_story()

@@ -11,10 +11,12 @@ from .unlock_result import UnlockResult
 class Section:
     def __init__(
         self,
+        section_id: str,
         technical_goals: List[TechnicalGoal],
         unlock_conditions: UnlockConditions,
         story_fragment: StoryFragment,
     ):
+        self.id = section_id
         self.technical_goals = technical_goals
         self.unlock_conditions = unlock_conditions
         self.story_fragment = story_fragment

@@ -1,5 +1,3 @@
-from unittest.mock import Mock, patch
-
 from src.domain.story.section import Section
 from src.domain.story.story_fragment import StoryFragment
 from src.domain.story.technical_goal import TechnicalGoal
@@ -7,7 +5,7 @@ from src.domain.story.unlock_conditions import UnlockConditions
 
 
 class TestSection:
-    def test_unlock_story_calls_successful_factory_when_conditions_met(self):
+    def test_unlock_story_returns_successful_result_when_conditions_met(self):
         goals = [
             TechnicalGoal("bow_hold", completed=True),
             TechnicalGoal("intonation", completed=True),
@@ -17,21 +15,18 @@ class TestSection:
         unlock_conditions = UnlockConditions(required_goals_count=3)
         story_fragment = StoryFragment("The spirit smiled...")
         section = Section(
+            section_id="section_1",
             technical_goals=goals,
             unlock_conditions=unlock_conditions,
             story_fragment=story_fragment,
         )
 
-        with patch(
-            "src.domain.story.unlock_result.UnlockResult.successful"
-        ) as mock_successful:
-            mock_successful.return_value = Mock()
+        result = section.unlock_story()
 
-            section.unlock_story()
+        assert result.is_eligible() is True
+        assert result.get_story_fragment().content == "The spirit smiled..."
 
-            mock_successful.assert_called_once_with(story_fragment)
-
-    def test_unlock_story_calls_unsuccessful_factory_when_conditions_not_met(self):
+    def test_unlock_story_returns_unsuccessful_result_when_conditions_not_met(self):
         goals = [
             TechnicalGoal("bow_hold", completed=True),
             TechnicalGoal("intonation", completed=True),
@@ -41,19 +36,15 @@ class TestSection:
         unlock_conditions = UnlockConditions(required_goals_count=3)
         story_fragment = StoryFragment("The spirit smiled...")
         section = Section(
+            section_id="section_2",
             technical_goals=goals,
             unlock_conditions=unlock_conditions,
             story_fragment=story_fragment,
         )
 
-        with patch(
-            "src.domain.story.unlock_result.UnlockResult.unsuccessful"
-        ) as mock_unsuccessful:
-            mock_unsuccessful.return_value = Mock()
+        result = section.unlock_story()
 
-            section.unlock_story()
-
-            mock_unsuccessful.assert_called_once()
+        assert result.is_eligible() is False
 
     def test_update_goal_completion_updates_matching_goals(self):
         goals = [
@@ -65,6 +56,7 @@ class TestSection:
         unlock_conditions = UnlockConditions(required_goals_count=3)
         story_fragment = StoryFragment("The spirit smiled...")
         section = Section(
+            section_id="section_3",
             technical_goals=goals,
             unlock_conditions=unlock_conditions,
             story_fragment=story_fragment,
