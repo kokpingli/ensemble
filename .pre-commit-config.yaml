@@ -1,26 +1,33 @@
 repos:
-  - repo: https://github.com/psf/black
-    rev: 24.1.0
+  - repo: local
     hooks:
       - id: black
-        language_version: python3
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
+        name: black
+        entry: uv run black
+        language: system
+        types: [python]
       - id: isort
-  - repo: https://github.com/pycqa/autoflake
-    rev: v2.2.1
-    hooks:
+        name: isort
+        entry: uv run isort
+        language: system
+        types: [python]
       - id: autoflake
+        name: autoflake
+        entry: uv run autoflake
+        language: system
+        types: [python]
         args: [--remove-all-unused-imports, --remove-unused-variables, --in-place]
-  - repo: https://github.com/pycqa/pylint
-    rev: v3.0.3
+  - repo: local
     hooks:
       - id: pylint
+        name: pylint
+        entry: uv run pylint
+        language: system
+        types: [python]
         args: [
           --fail-under=8.0,
           --disable=missing-function-docstring,
           --disable=missing-class-docstring,
           --disable=too-few-public-methods,
           --disable=redefined-outer-name
-        ]  # Only fail if score < 8.0
+        ]
