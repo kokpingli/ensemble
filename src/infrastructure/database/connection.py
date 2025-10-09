@@ -10,10 +10,10 @@ class DatabaseConnection:
     def __init__(self, database_url: str = None):
         self.database_url = database_url or "sqlite:///:memory:"
         self.engine = create_engine(self.database_url)
-        self.SessionLocal = sessionmaker(bind=self.engine)
+        self.session_local = sessionmaker(bind=self.engine)
 
     def create_tables(self):
         Base.metadata.create_all(bind=self.engine)
 
     def get_session(self) -> Session:
-        return self.SessionLocal()
+        return self.session_local()
