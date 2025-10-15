@@ -1,3 +1,5 @@
+"""Section-related API endpoints."""
+
 from fastapi import APIRouter, Depends
 
 from src.application.unlock_story_use_case import UnlockStoryUseCase

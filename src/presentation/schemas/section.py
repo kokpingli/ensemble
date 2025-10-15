@@ -1,3 +1,5 @@
+"""Pydantic schemas for section-related API requests and responses."""
+
 from pydantic import BaseModel
 
 

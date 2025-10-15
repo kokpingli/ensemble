@@ -1,3 +1,5 @@
+"""FastAPI application setup and configuration."""
+
 from fastapi import FastAPI
 
 from .api import sections
